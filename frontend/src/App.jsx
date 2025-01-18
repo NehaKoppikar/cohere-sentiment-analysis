@@ -21,7 +21,7 @@ function App() {
       const formData = new FormData()
       formData.append('text', review)
 
-      const response = await axios.post('http://localhost:8000/sentiment-analysis', formData, {
+      const response = await axios.post('http://localhost:5173/sentiment-analysis', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

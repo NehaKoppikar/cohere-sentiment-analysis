@@ -1,0 +1,49 @@
+# version: '3.8'
+
+# services:
+#   backend:
+#     platform: linux/amd64
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8000:8000"
+#     volumes:
+#       - ./backend:/app
+#     environment:
+#       - ENV=production
+
+#   frontend:
+#     platform: linux/amd64
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     ports:
+#       - "5173:80"
+#     volumes:
+#       - ./frontend:/app
+
+#version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"  # Serve frontend on production port
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - CORS_ORIGINS=http://localhost:5173
+    volumes:
+      - ./backend:/app
