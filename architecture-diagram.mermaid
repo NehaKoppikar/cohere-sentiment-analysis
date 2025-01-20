@@ -1,0 +1,37 @@
+flowchart TB
+    subgraph cloud[GCP Compute Engine Instance]
+        direction TB
+        
+        subgraph docker[Docker Environment]
+            direction TB
+            
+            nginx[Nginx Reverse Proxy\nPort 80]
+            
+            subgraph fe[Frontend Container]
+                react[React App\nPort 5173]
+            end
+            
+            subgraph be[Backend Container]
+                fastapi[FastAPI\nPort 8080]
+            end
+            
+        end
+        
+        nginx --> react
+        nginx --> fastapi
+    end
+    
+    user((User)) --> nginx
+    
+    fastapi <--> cohere[Cohere LLM API]
+    
+    %% Styling
+    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef external fill:#f5f5f5,stroke:#616161,stroke-width:2px
+    classDef proxy fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef user fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    
+    class fe,be container
+    class cohere external
+    class nginx proxy
+    class user user
