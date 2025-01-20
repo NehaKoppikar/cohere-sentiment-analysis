@@ -29,10 +29,10 @@ origins = [
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins, 
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],  # Be more specific about allowed methods
+    allow_headers=["Content-Type", "Authorization"],  # Be specific about allowed headers
 )
 
 # Setup the Cohere client
@@ -84,4 +84,4 @@ async def analyze_text(text: str = Form(...)):
         raise HTTPException(status_code=500, detail=str(e))
     
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

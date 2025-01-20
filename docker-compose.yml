@@ -1,29 +1,4 @@
-# version: '3.8'
-
-# services:
-#   backend:
-#     platform: linux/amd64
-#     build:
-#       context: ./backend
-#       dockerfile: Dockerfile
-#     ports:
-#       - "8000:8000"
-#     volumes:
-#       - ./backend:/app
-#     environment:
-#       - ENV=production
-
-#   frontend:
-#     platform: linux/amd64
-#     build:
-#       context: ./frontend
-#       dockerfile: Dockerfile
-#     ports:
-#       - "5173:80"
-#     volumes:
-#       - ./frontend:/app
-
-#version: "3.8"
+version: "3.8"
 
 services:
   frontend:
@@ -31,19 +6,32 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5173:80"  # Serve frontend on production port
+      - "5173:5173"
     environment:
       - NODE_ENV=production
     depends_on:
       - backend
+    networks:
+      - app-network
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       - CORS_ORIGINS=http://localhost:5173
     volumes:
       - ./backend:/app
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  app-network:
+    driver: bridge

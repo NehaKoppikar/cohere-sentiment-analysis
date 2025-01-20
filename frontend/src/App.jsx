@@ -14,14 +14,14 @@ function App() {
       setError('Please enter a review')
       return
     }
-
+  
     setLoading(true)
     setError(null)
     try {
       const formData = new FormData()
       formData.append('text', review)
-
-      const response = await axios.post('http://localhost:5173/sentiment-analysis', formData, {
+  
+      const response = await axios.post('http://0.0.0.0:8080/sentiment-analysis', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
